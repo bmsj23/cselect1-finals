@@ -116,7 +116,7 @@ int highScores[5] = {0,0,0,0,0};
 enum Difficulty { EASY, MEDIUM, HARD };
 Difficulty selectedDifficulty = HARD;
 const char* difficultyNames[] = {"Easy  ", "Medium", "Hard  "};
-const float difficultyMultipliers[] = {1.0f, 1.5f, 2.0f};
+const float difficultyMultipliers[] = {1.0f, 1.5f, 2.7f};
 
 // ===== Timing =====
 const int MOVE_DT_MS = 90;
@@ -214,7 +214,10 @@ void computeSchedule() {
   for (int i=0; i<len; i++) {
     startMs[i] = t;
     spawnMs[i] = (t >= (unsigned long)travelTimeMs) ? (t - travelTimeMs) : 0;
-    t += pgm_read_word(&beats[i]);
+    // multiply beat duration inversely by difficulty to speed up the song (difficulty logic)
+    unsigned int baseBeat = (unsigned int)pgm_read_word(&beats[i]);
+    float scaledBeat = (float)baseBeat / difficultyMultipliers[selectedDifficulty];
+    t += (unsigned long)(scaledBeat + 0.5f);
   }
 }
 
