@@ -307,7 +307,7 @@ void waitForStartPress() {
   drawBorders();
   lcd.setCursor(2,1);
   lcd.print(F("Press any button"));
-  lcd.setCursor(5,2);
+  lcd.setCursor(6,2);
   lcd.print(F("to start"));
 
   bool prevL = rawPressed(BTN_LEFT);
@@ -341,7 +341,7 @@ void songSelectionMenu() {
   const unsigned long LONG_PRESS_MS = 600;
   lcd.setCursor(0,2);
   lcd.print(F("                    "));
-  lcd.setCursor(0,2);
+  lcd.setCursor(3,2);
   lcd.print(songs[selectedSongIdx].name);
   delay(150);
 
@@ -364,7 +364,7 @@ void songSelectionMenu() {
       selectedSongIdx = (selectedSongIdx - 1 + NUM_SONGS) % NUM_SONGS;
       lcd.setCursor(0,2);
       lcd.print(F("                    "));
-      lcd.setCursor(0,2);
+      lcd.setCursor(3,2);
       lcd.print(songs[selectedSongIdx].name);
       delay(150);
     }
@@ -383,9 +383,9 @@ void songSelectionMenu() {
       lcd.print(F("    "));
       if (confirming) break;
       selectedSongIdx = (selectedSongIdx + 1) % NUM_SONGS;
-      lcd.setCursor(0,2);
+      lcd.setCursor(4,2);
       lcd.print(F("                    "));
-      lcd.setCursor(0,2);
+      lcd.setCursor(3,2);
       lcd.print(songs[selectedSongIdx].name);
       delay(150);
     }
@@ -396,9 +396,9 @@ void songSelectionMenu() {
 
   lcd.clear();
   drawBorders();
-  lcd.setCursor(6,1);
+  lcd.setCursor(3,1);
   lcd.print(F("Selected:"));
-  lcd.setCursor(0,2);
+  lcd.setCursor(3,2);
   lcd.print(songs[selectedSongIdx].name);
   delay(1000);
 }
@@ -414,7 +414,7 @@ void difficultySelectionMenu() {
   delay(150);
   lcd.setCursor(0,2);
   lcd.print(F("                    "));
-  lcd.setCursor(0,2);
+  lcd.setCursor(1,2);
   lcd.print(difficultyNames[selectedDifficulty]);
 
   bool confirming = false;
@@ -441,7 +441,7 @@ void difficultySelectionMenu() {
       selectedDifficulty = (Difficulty)((selectedDifficulty + 1) % 3);
       lcd.setCursor(0,2);
       lcd.print(F("                    "));
-      lcd.setCursor(0,2);
+      lcd.setCursor(1,2);
       lcd.print(difficultyNames[selectedDifficulty]);
       delay(200);
     }
@@ -449,9 +449,9 @@ void difficultySelectionMenu() {
   }
   lcd.clear();
   drawBorders();
-  lcd.setCursor(4,1);
+  lcd.setCursor(1,1);
   lcd.print(F("Difficulty Set:"));
-  lcd.setCursor(0,2);
+  lcd.setCursor(1,2);
   lcd.print(difficultyNames[selectedDifficulty]);
   delay(1000);
 }
@@ -459,9 +459,9 @@ void difficultySelectionMenu() {
 bool playAgainMenu() {
   lcd.clear();
   drawBorders();
-  lcd.setCursor(4,1);
+  lcd.setCursor(5,1);
   lcd.print(F("Play again?"));
-  lcd.setCursor(3,2);
+  lcd.setCursor(4,2);
   lcd.print(F("L=YES  R=MENU"));
 
   while (rawPressed(BTN_LEFT) || rawPressed(BTN_RIGHT)) {}
