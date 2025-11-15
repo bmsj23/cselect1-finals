@@ -180,6 +180,19 @@ inline void drawTarget() {
   put(0,2,'P');
 }
 
+inline void drawConfirmBarBottomSmooth(int filledCols) {
+  if (filledCols <= 0) {
+    lcd.setCursor(0,3);
+    lcd.print(F("===================="));
+    return;
+  }
+  if (filledCols > 20) filledCols = 20;
+  for (int col = 0; col < 20; col++) {
+    lcd.setCursor(col, 3);
+    lcd.print(col < filledCols ? (char)255 : ' ');
+  }
+}
+
 inline void clearCell(byte c, byte r) {
   if (c != 0) put(c,r,' ');
 }
@@ -338,7 +351,8 @@ void songSelectionMenu() {
   lcd.setCursor(2,1);
   lcd.print(F("Select Song..."));
 
-  const unsigned long LONG_PRESS_MS = 600;
+  const unsigned long LONG_PRESS_MS = 1000;
+  const unsigned long PROGRESS_SHOW_MS = 400;
   lcd.setCursor(0,2);
   lcd.print(F("                    "));
   lcd.setCursor(3,2);
@@ -351,15 +365,20 @@ void songSelectionMenu() {
       unsigned long t0 = millis();
       while (rawPressed(BTN_LEFT)) {
         unsigned long held = millis() - t0;
-        int progCols = (int)((float)held / (float)LONG_PRESS_MS * 4.0f + 0.5f);
-        if (progCols > 4) progCols = 4;
-        lcd.setCursor(16,1);
-        for (int p=0; p<4; p++) lcd.print(p < progCols ? (char)255 : ' ');
+
+        if (held >= PROGRESS_SHOW_MS) {
+          unsigned long progWindow = (LONG_PRESS_MS > PROGRESS_SHOW_MS) ? (LONG_PRESS_MS - PROGRESS_SHOW_MS) : 1;
+          unsigned long rel = held - PROGRESS_SHOW_MS;
+          int filledCols = (int)((float)rel / (float)progWindow * 20.0f + 0.5f);
+          if (filledCols > 20) filledCols = 20;
+          drawConfirmBarBottomSmooth(filledCols);
+        } else {
+          drawConfirmBarBottomSmooth(0);
+        }
         if (held >= LONG_PRESS_MS) { confirming = true; break; }
         delay(30);
       }
-      lcd.setCursor(16,1);
-      lcd.print(F("    "));
+      drawConfirmBarBottomSmooth(0);
       if (confirming) break;
       selectedSongIdx = (selectedSongIdx - 1 + NUM_SONGS) % NUM_SONGS;
       lcd.setCursor(0,2);
@@ -368,26 +387,30 @@ void songSelectionMenu() {
       lcd.print(songs[selectedSongIdx].name);
       delay(150);
     }
-    if (rawPressed(BTN_RIGHT)) {
-      unsigned long t0 = millis();
-      while (rawPressed(BTN_RIGHT)) {
-        unsigned long held = millis() - t0;
-        int progCols = (int)((float)held / (float)LONG_PRESS_MS * 4.0f + 0.5f);
-        if (progCols > 4) progCols = 4;
-        lcd.setCursor(16,1);
-        for (int p=0; p<4; p++) lcd.print(p < progCols ? (char)255 : ' ');
-        if (held >= LONG_PRESS_MS) { confirming = true; break; }
-        delay(30);
-      }
-      lcd.setCursor(16,1);
-      lcd.print(F("    "));
-      if (confirming) break;
-      selectedSongIdx = (selectedSongIdx + 1) % NUM_SONGS;
-      lcd.setCursor(4,2);
-      lcd.print(F("                    "));
-      lcd.setCursor(3,2);
-      lcd.print(songs[selectedSongIdx].name);
-      delay(150);
+      if (rawPressed(BTN_RIGHT)) {
+        unsigned long t0 = millis();
+        while (rawPressed(BTN_RIGHT)) {
+          unsigned long held = millis() - t0;
+          if (held >= PROGRESS_SHOW_MS) {
+            unsigned long progWindow = (LONG_PRESS_MS > PROGRESS_SHOW_MS) ? (LONG_PRESS_MS - PROGRESS_SHOW_MS) : 1;
+            unsigned long rel = held - PROGRESS_SHOW_MS;
+            int filledCols = (int)((float)rel / (float)progWindow * 20.0f + 0.5f);
+            if (filledCols > 20) filledCols = 20;
+            drawConfirmBarBottomSmooth(filledCols);
+          } else {
+            drawConfirmBarBottomSmooth(0);
+          }
+          if (held >= LONG_PRESS_MS) { confirming = true; break; }
+          delay(30);
+        }
+        drawConfirmBarBottomSmooth(0);
+        if (confirming) break;
+        selectedSongIdx = (selectedSongIdx + 1) % NUM_SONGS;
+        lcd.setCursor(4,2);
+        lcd.print(F("                    "));
+        lcd.setCursor(3,2);
+        lcd.print(songs[selectedSongIdx].name);
+        delay(150);
     }
     lcd.setCursor(2,1);
     lcd.print(F(" Hold to Select  "));
@@ -410,7 +433,8 @@ void difficultySelectionMenu() {
   lcd.clear();
   drawBorders();
 
-  const unsigned long LONG_PRESS_MS = 600;
+  const unsigned long LONG_PRESS_MS = 1000;
+  const unsigned long PROGRESS_SHOW_MS = 400;
   delay(150);
   lcd.setCursor(0,2);
   lcd.print(F("                    "));
@@ -425,18 +449,22 @@ void difficultySelectionMenu() {
       unsigned long t0 = millis();
       while (rawPressed(BTN_RIGHT)) {
         unsigned long held = millis() - t0;
-        int progCols = (int)((float)held / (float)LONG_PRESS_MS * 4.0f + 0.5f);
-        if (progCols > 4) progCols = 4;
-        lcd.setCursor(16,1);
-        for (int p = 0; p < 4; p++) lcd.print(p < progCols ? (char)255 : ' ');
+        if (held >= PROGRESS_SHOW_MS) {
+          unsigned long progWindow = (LONG_PRESS_MS > PROGRESS_SHOW_MS) ? (LONG_PRESS_MS - PROGRESS_SHOW_MS) : 1;
+          unsigned long rel = held - PROGRESS_SHOW_MS;
+          int filledCols = (int)((float)rel / (float)progWindow * 20.0f + 0.5f);
+          if (filledCols > 20) filledCols = 20;
+          drawConfirmBarBottomSmooth(filledCols);
+        } else {
+          drawConfirmBarBottomSmooth(0);
+        }
         if (held >= LONG_PRESS_MS) {
           confirming = true;
           break;
         }
         delay(30);
       }
-      lcd.setCursor(16,1);
-      lcd.print(F("    "));
+      drawConfirmBarBottomSmooth(0);
       if (confirming) break;
       selectedDifficulty = (Difficulty)((selectedDifficulty + 1) % 3);
       lcd.setCursor(0,2);
