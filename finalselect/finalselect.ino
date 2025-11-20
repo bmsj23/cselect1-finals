@@ -101,11 +101,11 @@ struct Song {
 };
 
 Song songs[] = {
-  { "Happy Birthday", hb_melody, hb_beatMs, (int)(sizeof(hb_melody)/sizeof(int)) }, // 26 notes
-  { "Jingle Bell", jingle_melody, jingle_beatMs, (int)(sizeof(jingle_melody)/sizeof(int)) }, // 31 notes
-  { "Blue Danube", blue_melody, blue_beatMs, (int)(sizeof(blue_melody)/sizeof(int)) }, // 29 notes
-  { "Nocturne Op9", nocturne_melody, nocturne_beatMs, (int)(sizeof(nocturne_melody)/sizeof(int)) }, // 28 notes
-  { "Waltz Mirror", waltz_melody, waltz_beatMs, (int)(sizeof(waltz_melody)/sizeof(int)) } // 25 notes
+  { "Happy Birthday", hb_melody, hb_beatMs, (int)(sizeof(hb_melody)/sizeof(int)) },
+  { "Jingle Bell", jingle_melody, jingle_beatMs, (int)(sizeof(jingle_melody)/sizeof(int)) },
+  { "Blue Danube", blue_melody, blue_beatMs, (int)(sizeof(blue_melody)/sizeof(int)) },
+  { "Nocturne Op9", nocturne_melody, nocturne_beatMs, (int)(sizeof(nocturne_melody)/sizeof(int)) },
+  { "Waltz Mirror", waltz_melody, waltz_beatMs, (int)(sizeof(waltz_melody)/sizeof(int)) }
 };
 const int NUM_SONGS = sizeof(songs)/sizeof(Song);
 
